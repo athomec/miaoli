@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+
+<head>
+	<title>土地普查資訊管理系統</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="keywords" content="土地普查資訊管理系統,土地普查,管理系統,水利署苗栗管理處">
+	<meta name="description" content="土地普查資訊管理系統" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta property="og:site_name" content="土地普查資訊管理系統" />
+	<meta property="og:image" content="assets/images/fb-img.png" />
+	<!--FB分享設定-->
+
+	<link rel="icon" href="assets/images/favicon.svg" type="image/ico" />
+	<!--iconfont設定-->
+	<link rel="stylesheet" href="assets/style/all.css">
+	<link rel="stylesheet"
+		href="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.0/css/smoothness/jquery-ui-1.10.0.custom.min.css" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+	<!--css設定-->
+</head>
+
+<body class="scrollbar">
+	<!-- SCRIPTS -->
+	<script src="assets/js/jquery-3.3.1.min.js"></script>
+	<script src="assets/js/bootstrap.bundle.js"></script>
+	<script src="assets/js/script.js"></script>
+	<script src="assets/js/footable.js"></script>
+	<script src="assets/js/moment-with-locales.min.js"></script>
+	<script src="assets/js/tempusdominus-bootstrap-4.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.0/jquery-ui.js"></script>
+	<script type="text/javascript">
+		$(function () {
+			function RESIZE() {
+				var WINDOW = $(window).width();
+				if (WINDOW < 768) {
+					$(".js-side-menu").addClass("close");
+					$(".js-side-content").addClass("close");
+				}else{
+					$(".js-side-menu").removeClass("close");
+					$(".js-side-content").removeClass("close");
+				}
+			}
+
+			// Initial call
+			RESIZE();
+
+			$(window).resize(function () {
+				RESIZE();
+			});
+			//拖曳功能
+			$(".js-draggable").draggable();
+			//日期功能
+			var options = {
+				locale: 'zh-tw',
+				defaultDate: new Date(),
+				format: 'L',
+				icons: {
+					time: "bi bi-clock",
+					date: "bi bi-calendar",
+					up: "bi bi-arrow-up",
+					down: "bi bi-arrow-down",
+					previous: "bi bi-chevron-left",
+					next: "bi bi-chevron-right",
+					today: "bi bi-clock",
+					clear: "bi bi-trash3"
+				},
+				widgetPositioning: {
+					vertical: 'bottom',
+				}
+			};
+			$('#exportFrom, #exportTo').datetimepicker(options);
+			//拉霸控制項
+			updateProgress();
+			function updateProgress() {
+				var rangeContainers = document.querySelectorAll('.range-group');
+				rangeContainers.forEach(function (container) {
+					var range = container.querySelector('.form-range');
+					var progress = container.querySelector('.progress-bar');
+					range.addEventListener('input', function () {
+						var value = this.value;
+						progress.style.width = value + '%';
+						progress.setAttribute('aria-valuenow', value);
+						progress.setAttribute('style', 'width: ' + value + '%;');
+					});
+				});
+			}
+		});
+		//iframe高度控制
+		function reinitIframe(item) {
+			var iframe = document.getElementById(item);
+			try {
+				var bHeight = iframe.contentWindow.document.body.scrollHeight;
+				var dHeight = iframe.contentWindow.document.documentElement.scrollHeight;
+				var height = Math.max(bHeight, dHeight);
+				iframe.height = height;
+				console.log(height);
+			} catch (ex) { }
+		}
+	</script>
+	<script type="text/javascript">
+		$(".js-side-info-body").find('button').click(function () {
+			let linkTarget = $(this).attr("data-bs-target");
+			window.parent.$(linkTarget).modal("show");
+		});
+	</script>
+	<div class="modal-header" data-txt="less">
+	<h5 class="modal-title">
+		<img src="./assets/images/ic-condition-light.svg" alt="條件查詢icon" class="me-2"> 條件查詢
+	</h5>
+</div>
+<div class="modal-body px-2 py-4">
+	<div class="bg-primary-xxlight-color p-3">
+		<div class="row gx-0 gy-2">
+			<div class="col-sm-6">
+				<div class="d-flex justify-content-end align-items-center mb-2">
+					<label for="search-year" class="me-2">年度</label>
+					<select class="form-select" id="search-year" style="width: calc(100% - 75px);">
+						<option selected="">請選擇</option>
+						<option value="1">One</option>
+						<option value="2">Two</option>
+						<option value="3">Three</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="d-flex justify-content-end align-items-center mb-2">
+					<label for="search-town" class="me-2">鄉鎮</label>
+					<select class="form-select" id="search-town" style="width: calc(100% - 75px);">
+						<option selected="">請選擇</option>
+						<option value="1">One</option>
+						<option value="2">Two</option>
+						<option value="3">Three</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="d-flex justify-content-end align-items-center mb-2">
+					<label for="search-check" class="me-2">是否巡查</label>
+					<select class="form-select" id="search-check" style="width: calc(100% - 75px);">
+						<option selected="">全部</option>
+						<option value="1">One</option>
+						<option value="2">Two</option>
+						<option value="3">Three</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="d-flex justify-content-end align-items-center mb-2">
+					<label for="search-city" class="me-2">縣市</label>
+					<select class="form-select" id="search-city" style="width: calc(100% - 75px);">
+						<option selected="">請選擇</option>
+						<option value="1">One</option>
+						<option value="2">Two</option>
+						<option value="3">Three</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="d-flex justify-content-end align-items-center mb-2">
+					<label for="search-lot" class="me-2">地段</label>
+					<select class="form-select" id="search-lot" style="width: calc(100% - 75px);">
+						<option selected="">請選擇</option>
+						<option value="1">One</option>
+						<option value="2">Two</option>
+						<option value="3">Three</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div style="padding-left: 38px;">
+					<button type="button" class="btn btn-primary text-white rounded-3 py-1 w-100 js-inside-info-opener"
+					data-target="#hasinfo" data-bs-dismiss="modal">查詢</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	$(".js-inside-info-opener").click(function () {
+		window.parent.$("#info-search").find('.btn-close').trigger("click");
+	});
+</script>
+</body>
+
+</html>
+</body>
+
+</html>

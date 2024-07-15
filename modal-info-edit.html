@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+
+<head>
+	<title>土地普查資訊管理系統</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="keywords" content="土地普查資訊管理系統,土地普查,管理系統,水利署苗栗管理處">
+	<meta name="description" content="土地普查資訊管理系統" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta property="og:site_name" content="土地普查資訊管理系統" />
+	<meta property="og:image" content="assets/images/fb-img.png" />
+	<!--FB分享設定-->
+
+	<link rel="icon" href="assets/images/favicon.svg" type="image/ico" />
+	<!--iconfont設定-->
+	<link rel="stylesheet" href="assets/style/all.css">
+	<link rel="stylesheet"
+		href="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.0/css/smoothness/jquery-ui-1.10.0.custom.min.css" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+	<!--css設定-->
+</head>
+
+<body class="scrollbar">
+	<!-- SCRIPTS -->
+	<script src="assets/js/jquery-3.3.1.min.js"></script>
+	<script src="assets/js/bootstrap.bundle.js"></script>
+	<script src="assets/js/script.js"></script>
+	<script src="assets/js/footable.js"></script>
+	<script src="assets/js/moment-with-locales.min.js"></script>
+	<script src="assets/js/tempusdominus-bootstrap-4.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.0/jquery-ui.js"></script>
+	<script type="text/javascript">
+		$(function () {
+			function RESIZE() {
+				var WINDOW = $(window).width();
+				if (WINDOW < 768) {
+					$(".js-side-menu").addClass("close");
+					$(".js-side-content").addClass("close");
+				}else{
+					$(".js-side-menu").removeClass("close");
+					$(".js-side-content").removeClass("close");
+				}
+			}
+
+			// Initial call
+			RESIZE();
+
+			$(window).resize(function () {
+				RESIZE();
+			});
+			//拖曳功能
+			$(".js-draggable").draggable();
+			//日期功能
+			var options = {
+				locale: 'zh-tw',
+				defaultDate: new Date(),
+				format: 'L',
+				icons: {
+					time: "bi bi-clock",
+					date: "bi bi-calendar",
+					up: "bi bi-arrow-up",
+					down: "bi bi-arrow-down",
+					previous: "bi bi-chevron-left",
+					next: "bi bi-chevron-right",
+					today: "bi bi-clock",
+					clear: "bi bi-trash3"
+				},
+				widgetPositioning: {
+					vertical: 'bottom',
+				}
+			};
+			$('#exportFrom, #exportTo').datetimepicker(options);
+			//拉霸控制項
+			updateProgress();
+			function updateProgress() {
+				var rangeContainers = document.querySelectorAll('.range-group');
+				rangeContainers.forEach(function (container) {
+					var range = container.querySelector('.form-range');
+					var progress = container.querySelector('.progress-bar');
+					range.addEventListener('input', function () {
+						var value = this.value;
+						progress.style.width = value + '%';
+						progress.setAttribute('aria-valuenow', value);
+						progress.setAttribute('style', 'width: ' + value + '%;');
+					});
+				});
+			}
+		});
+		//iframe高度控制
+		function reinitIframe(item) {
+			var iframe = document.getElementById(item);
+			try {
+				var bHeight = iframe.contentWindow.document.body.scrollHeight;
+				var dHeight = iframe.contentWindow.document.documentElement.scrollHeight;
+				var height = Math.max(bHeight, dHeight);
+				iframe.height = height;
+				console.log(height);
+			} catch (ex) { }
+		}
+	</script>
+	<script type="text/javascript">
+		$(".js-side-info-body").find('button').click(function () {
+			let linkTarget = $(this).attr("data-bs-target");
+			window.parent.$(linkTarget).modal("show");
+		});
+	</script>
+	<div class="modal-header">
+    <h4 class="modal-title"><img src="./assets/images/ic-openbook.svg" alt="icon" class="me-2"> 外業占用勘查 編輯</h4>
+    <div class="d-flex align-items-center ms-auto">
+    </div>
+</div>
+<div class="modal-body py-3 px-0 px-md-2">
+    <div class="gotop js-gotop">
+        <img src="./assets/images/ic-gotop.svg" alt="icon">
+        <p>TOP</p>
+    </div>
+    <div class="container-fluid">
+        <ul class="row mb-4">
+            <li class="col-md-4 d-flex align-items-center">
+                <span class="bg-primary-light py-2 text-center me-3" style="width: 100px;">年度</span>
+                <p c>111</p>
+            </li>
+            <li class="col-md-4 d-flex align-items-center">
+                <span class="bg-primary-light py-2 text-center me-3" style="width: 100px;">勘查時間</span>
+                <p>2022-04-18 11:40:26</p>
+            </li>
+            <li class="col-md-4 d-flex align-items-center">
+                <span class="bg-primary-light py-2 text-center me-3" style="width: 100px;">勘查人員</span>
+                <p>王小名</p>
+            </li>
+        </ul>
+        <div class="row">
+            <h5 class="modal-body-title d-flex align-items-center mb-2">
+                <img src="./assets/images/ic-basic-info.svg" alt="基本資料icon" class="me-2"> 基本資料
+            </h5>
+        </div>
+        <div class="bg-primary-xxlight-color p-3 mb-4">
+            <div class="row gy-2">
+                <div class="col-sm-6">
+                    <div class="d-flex justify-content-end align-items-center mb-2">
+                        <label for="info-cadastre" class="me-2">地籍</label>
+                        <input class="form-control" type="text" value="地籍地籍地籍"
+                            style="width: calc(100% - 92px)" id="info-cadastre">
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="d-flex justify-content-end align-items-center mb-2">
+                        <label for="infoProperty" class="me-2">財產別</label>
+                        <input class="form-control" type="text" value="文字文字文字文字"
+                            style="width: calc(100% - 92px)" id="infoProperty">
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="d-flex justify-content-end align-items-center mb-2">
+                        <label for="infoBusiness" class="me-2">事用業用</label>
+                        <input class="form-control" type="text" value="事業用" style="width: calc(100% - 92px)"
+                            id="infoBusiness">
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="d-flex justify-content-end align-items-center mb-2">
+                        <label for="infoStation" class="me-2">工作站</label>
+                        <input class="form-control" type="text" value="文字文字文字文字"
+                            style="width: calc(100% - 92px)" id="infoStation">
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="d-flex justify-content-end align-items-center mb-2">
+                        <label for="infoZone" class="me-2">使用分區</label>
+                        <input class="form-control" type="text" style="width: calc(100% - 92px)"
+                            id="infoZone" value="文字文字文字文字">
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="d-flex justify-content-end align-items-center mb-2">
+                        <label for="infoType" class="me-2">使用地類別</label>
+                        <input class="form-control" type="text" style="width: calc(100% - 92px)"
+                            id="infoType" value="文字文字文字文字">
+                    </div>
+                </div>
+                <div class="col-sm-6 d-flex">
+                    <p class="text-end me-2" style="width: 85px;">勘查結果</p>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1"
+                            value="option1" checked>
+                        <label class="form-check-label" for="inlineRadio1">無佔用</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2"
+                            value="option2">
+                        <label class="form-check-label" for="inlineRadio2">有佔用情形</label>
+                    </div>
+                </div>
+                <div class="col-sm-6 d-flex justify-content-end">
+                    <button class="btn btn-sm btn-secondary rounded-3 text-white d-flex align-items-center px-4 py-1">
+                        <img src="./assets/images/ic-save.svg" alt="儲存" class="me-1">儲存
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="accordion modal-accordion">
+            <div class="accordion-item">
+                <button class="accordion-button py-2 bg-primary-light text-primary-dark" type="button"
+                data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                占用情形1
+            </button>
+            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent=".modal-accordion">
+                <div class="accordion-body px-0">
+                    <div class="row gy-3">
+                        <div class="col-12 d-flex justify-content-end align-items-center">
+                            <label for="buildingNow" class="me-2">地上物情形</label>
+                            <select class="form-select" id="buildingNow" style="width: calc(100% - 92px)">
+                                <option selected>占用土地設有頂蓋但無圍牆、種植農作物、養殖或造林</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </div>
+                        <div class="col-12 d-flex justify-content-end align-items-center">
+                            <label for="caption" class="me-2">說明</label>
+                            <input class="form-control" type="text" value="說明文字說明文字說明文字說明文字說明文字"
+                                style="width: calc(100% - 92px)" id="caption">
+                        </div>
+                        <div class="col-sm-6 d-flex justify-content-end align-items-center">
+                            <label for="occupier" class="me-2">占用人</label>
+                            <input class="form-control" type="text" style="width: calc(100% - 92px)" id="occupier">
+                        </div>
+                        <div class="col-sm-6 d-flex justify-content-end align-items-center">
+                            <label for="contact" class="me-2">連絡電話</label>
+                            <input class="form-control" type="text" style="width: calc(100% - 92px)" id="contact">
+                        </div>
+                        <div class="col-sm-6 d-flex justify-content-end align-items-center">
+                            <label for="occupiedArea" class="me-2">占用面積</label>
+                            <input class="form-control" type="text" style="width: calc(100% - 92px)" id="occupiedArea">
+                        </div>
+                        <div class="col-sm-6 d-flex justify-content-end align-items-center">
+                            <label for="address" class="me-2">聯絡地址</label>
+                            <input class="form-control" type="text" style="width: calc(100% - 92px)" id="address">
+                        </div>
+                        <div class="col-12 d-flex align-items-start flex-column flex-sm-row">
+                            <h6 class="photo-title mb-0 pe-2 text-end mb-2 mb-sm-0" style="width: 93px;">照片檢視</h6>
+                            <div class="w-mobile-lg-100" style="width: calc(100% - 92px)">
+                                <p class="text-primary-dark mb-3">照片限 jpg、png 格式，每張照片3MB以下，最多5張</p>
+                                <div class="row img-list">
+                                    <div class="col-6 col-md-3 col-lg-2 mb-2">
+                                        <div class="img-list-box">
+                                            <button class="btn img-list-btn"><img src="./assets/images/ic-trash.svg"></button>
+                                            <a href="#" class="img-list-link"><img src="./assets/images/demo-pic.jpg"></a>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-md-3 col-lg-2 mb-2">
+                                        <div class="img-list-box">
+                                            <button class="btn img-list-btn"><img src="./assets/images/ic-trash.svg"></button>
+                                            <a href="#" class="img-list-link"><img src="./assets/images/demo-pic.jpg"></a>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-md-3 col-lg-2 mb-2">
+                                        <div class="img-list-box">
+                                            <button class="btn img-list-btn"><img src="./assets/images/ic-trash.svg"></button>
+                                            <a href="#" class="img-list-link"><img src="./assets/images/demo-pic.jpg"></a>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-md-3 col-lg-2 mb-2">
+                                        <div class="img-list-box">
+                                            <button class="btn img-list-btn"><img src="./assets/images/ic-trash.svg"></button>
+                                            <a href="#" class="img-list-link"><img src="./assets/images/demo-pic.jpg"></a>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-md-3 col-lg-2 mb-2">
+                                        <div class="img-list-box">
+                                            <button class="btn img-list-btn"><img src="./assets/images/ic-trash.svg"></button>
+                                            <a href="#" class="img-list-link"><img src="./assets/images/demo-pic.jpg"></a>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-md-3 col-lg-2 mb-2">
+                                        <button class="btn img-list-add w-100">
+                                            <img src="./assets/images/ic-add-pic.svg" class="mb-2">
+                                            新增照片
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex justify-content-end align-items-center mb-4">
+                            <button class="btn btn-highlight d-flex align-items-center text-white me-3">
+                                <img src="./assets/images/ic-trash-white.svg" alt="icon" class="me-2"> 刪除占用情形
+                            </button>
+                            <button class="btn btn-primary-dark d-flex align-items-center">
+                                <img src="./assets/images/ic-add-occupy.svg" alt="icon" class="me-2"> 新增占用情形
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(".js-gotop").click(function () {
+		$("html,body").animate({ scrollTop: 0 }, 300);
+		return false;
+	})
+</script>
+</body>
+
+</html>

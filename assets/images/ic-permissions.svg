@@ -1,0 +1,12 @@
+<svg id="ic-permissions" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g id="Group_654" data-name="Group 654">
+    <rect id="Rectangle_696" data-name="Rectangle 696" width="20" height="20" fill="none"/>
+  </g>
+  <g id="Group_656" data-name="Group 656" transform="translate(2.5 2.5)">
+    <g id="Group_655" data-name="Group 655">
+      <circle id="Ellipse_38" data-name="Ellipse 38" cx="0.933" cy="0.933" r="0.933" transform="translate(10.733 9.483)" fill="#5eb4f1"/>
+      <path id="Path_2019" data-name="Path 2019" d="M16.627,17.5c-.608,0-1.825.3-1.867.9a2.274,2.274,0,0,0,3.733,0C18.452,17.8,17.235,17.5,16.627,17.5Z" transform="translate(-4.96 -5.417)" fill="#5eb4f1" fill-rule="evenodd"/>
+      <path id="Path_2020" data-name="Path 2020" d="M15.5,9.742V5.725L9.25,3,3,5.725V9.817A8.511,8.511,0,0,0,9.25,18a7.638,7.638,0,0,0,1.333-.458,5,5,0,1,0,4.917-7.8ZM9.667,14.667a4.8,4.8,0,0,0,.192,1.35,5.489,5.489,0,0,1-.608.25,6.84,6.84,0,0,1-4.583-6.45v-3l4.583-2,4.583,2V9.742A5,5,0,0,0,9.667,14.667Zm5,3.333A3.333,3.333,0,1,1,18,14.667,3.332,3.332,0,0,1,14.667,18Z" transform="translate(-3 -3)" fill="#5eb4f1" fill-rule="evenodd"/>
+    </g>
+  </g>
+</svg>

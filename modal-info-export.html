@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+
+<head>
+	<title>土地普查資訊管理系統</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="keywords" content="土地普查資訊管理系統,土地普查,管理系統,水利署苗栗管理處">
+	<meta name="description" content="土地普查資訊管理系統" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta property="og:site_name" content="土地普查資訊管理系統" />
+	<meta property="og:image" content="assets/images/fb-img.png" />
+	<!--FB分享設定-->
+
+	<link rel="icon" href="assets/images/favicon.svg" type="image/ico" />
+	<!--iconfont設定-->
+	<link rel="stylesheet" href="assets/style/all.css">
+	<link rel="stylesheet"
+		href="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.0/css/smoothness/jquery-ui-1.10.0.custom.min.css" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+	<!--css設定-->
+</head>
+
+<body class="scrollbar">
+	<!-- SCRIPTS -->
+	<script src="assets/js/jquery-3.3.1.min.js"></script>
+	<script src="assets/js/bootstrap.bundle.js"></script>
+	<script src="assets/js/script.js"></script>
+	<script src="assets/js/footable.js"></script>
+	<script src="assets/js/moment-with-locales.min.js"></script>
+	<script src="assets/js/tempusdominus-bootstrap-4.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.0/jquery-ui.js"></script>
+	<script type="text/javascript">
+		$(function () {
+			function RESIZE() {
+				var WINDOW = $(window).width();
+				if (WINDOW < 768) {
+					$(".js-side-menu").addClass("close");
+					$(".js-side-content").addClass("close");
+				}else{
+					$(".js-side-menu").removeClass("close");
+					$(".js-side-content").removeClass("close");
+				}
+			}
+
+			// Initial call
+			RESIZE();
+
+			$(window).resize(function () {
+				RESIZE();
+			});
+			//拖曳功能
+			$(".js-draggable").draggable();
+			//日期功能
+			var options = {
+				locale: 'zh-tw',
+				defaultDate: new Date(),
+				format: 'L',
+				icons: {
+					time: "bi bi-clock",
+					date: "bi bi-calendar",
+					up: "bi bi-arrow-up",
+					down: "bi bi-arrow-down",
+					previous: "bi bi-chevron-left",
+					next: "bi bi-chevron-right",
+					today: "bi bi-clock",
+					clear: "bi bi-trash3"
+				},
+				widgetPositioning: {
+					vertical: 'bottom',
+				}
+			};
+			$('#exportFrom, #exportTo').datetimepicker(options);
+			//拉霸控制項
+			updateProgress();
+			function updateProgress() {
+				var rangeContainers = document.querySelectorAll('.range-group');
+				rangeContainers.forEach(function (container) {
+					var range = container.querySelector('.form-range');
+					var progress = container.querySelector('.progress-bar');
+					range.addEventListener('input', function () {
+						var value = this.value;
+						progress.style.width = value + '%';
+						progress.setAttribute('aria-valuenow', value);
+						progress.setAttribute('style', 'width: ' + value + '%;');
+					});
+				});
+			}
+		});
+		//iframe高度控制
+		function reinitIframe(item) {
+			var iframe = document.getElementById(item);
+			try {
+				var bHeight = iframe.contentWindow.document.body.scrollHeight;
+				var dHeight = iframe.contentWindow.document.documentElement.scrollHeight;
+				var height = Math.max(bHeight, dHeight);
+				iframe.height = height;
+				console.log(height);
+			} catch (ex) { }
+		}
+	</script>
+	<script type="text/javascript">
+		$(".js-side-info-body").find('button').click(function () {
+			let linkTarget = $(this).attr("data-bs-target");
+			window.parent.$(linkTarget).modal("show");
+		});
+	</script>
+	<div class="modal-header">
+    <h5 class="modal-title"><img src="./assets/images/ic-export-light.svg" alt="查詢/匯出icon" class="me-2"> 查詢/匯出內業普查清冊</h5>
+</div>
+<div class="modal-body px-0 px-md-4">
+    <div class="container-fluid">
+        <div class="py-3 mb-3">
+            <div class="modal-form">
+                <div class="modal-form-group mb-2 me-sm-3">
+                    <label for="exportYear" class="form-label text-sm-end me-2">普查年度</label>
+                    <select class="form-select w-mobile-lg-100" id="exportYear"
+                        style="width: 160px;">
+                        <option selected="">113</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
+                <div class="modal-form-group mb-2 me-sm-3">
+                    <label for="exportFrom" class="form-label text-sm-end me-2">巡查日期(起)</label>
+                    <div class="form-group w-mobile-lg-100" style="width: 160px;">
+                        <div class="input-group date" id="exportFrom" data-target-input="nearest">
+                            <input type="text"
+                                class="form-control datetimepicker-input border-end-0"
+                                data-target="#exportFrom" />
+                            <div class="input-group-append" data-target="#exportFrom"
+                                data-toggle="datetimepicker">
+                                <div class="input-group-text"><img
+                                        src="./assets/images/ic-calendar.svg">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-form-group mb-2 me-sm-3">
+                    <label for="exportTo" class="form-label text-sm-end me-2">巡查日期(迄)</label>
+                    <div class="form-group w-mobile-lg-100" style="width: 160px;">
+                        <div class="input-group date" id="exportTo" data-target-input="nearest">
+                            <input type="text"
+                                class="form-control datetimepicker-input border-end-0"
+                                data-target=" #exportTo" />
+                            <div class="input-group-append" data-target="#exportTo"
+                                data-toggle="datetimepicker">
+                                <div class="input-group-text">
+                                    <img src="./assets/images/ic-calendar.svg">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-form-group mb-2 me-sm-3">
+                    <label for="exportProperty" class="form-label text-sm-end me-2">財產別</label>
+                    <select class="form-select w-mobile-lg-100" id="exportProperty" style="width: 160px;">
+                        <option selected="">全部</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
+                <div class="modal-form-group mb-2 me-sm-3">
+                    <label for="exportUnit" class="form-label text-sm-end me-2">普查單位</label>
+                    <select class="form-select w-mobile-lg-100" id="exportUnit" style="width: 160px;">
+                        <option selected="">全部</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
+                <div class="modal-form-group mb-2 me-sm-3">
+                    <label for="exportNow" class="form-label text-sm-end me-2">普查狀況</label>
+                    <select class="form-select w-mobile-lg-100" id="exportNow" style="width: 160px;">
+                        <option selected="">全部</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
+                <div class="modal-form-group mb-2 me-sm-3">
+                    <label for="exportStation" class="form-label text-sm-end me-2">工作站</label>
+                    <select class="form-select w-mobile-lg-100" id="exportStation" style="width: 160px;">
+                        <option selected="">全部</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
+                <div class="modal-form-group flex-wrap mb-2 me-sm-3">
+                    <label for="export-member" class="form-label text-sm-end me-2">巡查人員</label>
+                    <select class="form-select me-sm-2 mb-2 w-mobile-lg-100" id="export-member" style="width: 160px;">
+                        <option selected="">全部</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                    <input class="form-control mb-2 w-mobile-lg-100" type="text" value="人員關鍵字"
+                        style="width: calc(50% - 39px)" placeholder="請輸入人員關鍵字" id="export-member-key">
+                </div>
+                <div class="d-flex align-items-center mb-2 ms-auto me-3">
+                    <button class="btn btn-secondary text-white d-flex px-4 py-1 me-2 ">
+                        <img src="./assets/images/ic-cloud.svg" alt="匯出" class="me-1">匯出
+                    </button>
+                    <button class="btn btn-primary-dark d-flex px-4 py-1">
+                        <img src="./assets/images/ic-file-search.svg" alt="查詢" class="me-1">查詢
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="table-wrapper scroll">
+                    <table class="table table-export mb-0 bg-white footable" data-toggle-column="last">
+                        <thead>
+                            <tr>
+                                <th data-breakpoints="xs">財產編號1</th>
+                                <th>鄉鎮市區</th>
+                                <th>地段</th>
+                                <th>地號</th>
+                                <th data-breakpoints="xs sm md">事業狀態</th>
+                                <th data-breakpoints="xs">工作站</th>
+                                <th data-breakpoints="xs">普查情形</th>
+                                <th data-breakpoints="xs">普查日期</th>
+                                <th data-breakpoints="xs sm md">普查人員</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1040201-0002-0000009</td>
+                                <td>苗栗市某某區</td>
+                                <td>地段地段</td>
+                                <td>1320</td>
+                                <td>事業用地</td>
+                                <td>苗栗工作站</td>
+                                <td>疑似占用</td>
+                                <td>2024/12/12</td>
+                                <td>王曉明</td>
+                            </tr>
+                            <tr>
+                                <td>1040201-0002-0000009</td>
+                                <td>苗栗市某某區</td>
+                                <td>地段地段</td>
+                                <td>1320</td>
+                                <td>事業用地</td>
+                                <td>苗栗工作站</td>
+                                <td>疑似占用</td>
+                                <td>2024/12/12</td>
+                                <td>王曉明</td>
+                            </tr>
+                            <tr>
+                                <td>1040201-0002-0000009</td>
+                                <td>苗栗市某某區</td>
+                                <td>地段地段</td>
+                                <td>1320</td>
+                                <td>事業用地</td>
+                                <td>苗栗工作站</td>
+                                <td>疑似占用</td>
+                                <td>2024/12/12</td>
+                                <td>王曉明</td>
+                            </tr>
+                            <tr>
+                                <td>1040201-0002-0000009</td>
+                                <td>苗栗市某某區</td>
+                                <td>地段地段</td>
+                                <td>1320</td>
+                                <td>事業用地</td>
+                                <td>苗栗工作站</td>
+                                <td>疑似占用</td>
+                                <td>2024/12/12</td>
+                                <td>王曉明</td>
+                            </tr>
+                            <tr>
+                                <td>1040201-0002-0000009</td>
+                                <td>苗栗市某某區</td>
+                                <td>地段地段</td>
+                                <td>1320</td>
+                                <td>事業用地</td>
+                                <td>苗栗工作站</td>
+                                <td>疑似占用</td>
+                                <td>2024/12/12</td>
+                                <td>王曉明</td>
+                            </tr>
+                            <tr>
+                                <td>1040201-0002-0000009</td>
+                                <td>苗栗市某某區</td>
+                                <td>地段地段</td>
+                                <td>1320</td>
+                                <td>事業用地</td>
+                                <td>苗栗工作站</td>
+                                <td>疑似占用</td>
+                                <td>2024/12/12</td>
+                                <td>王曉明</td>
+                            </tr>
+                            <tr>
+                                <td>1040201-0002-0000009</td>
+                                <td>苗栗市某某區</td>
+                                <td>地段地段</td>
+                                <td>1320</td>
+                                <td>事業用地</td>
+                                <td>苗栗工作站</td>
+                                <td>疑似占用</td>
+                                <td>2024/12/12</td>
+                                <td>王曉明</td>
+                            </tr>
+                            <tr>
+                                <td>1040201-0002-0000009</td>
+                                <td>苗栗市某某區</td>
+                                <td>地段地段</td>
+                                <td>1320</td>
+                                <td>事業用地</td>
+                                <td>苗栗工作站</td>
+                                <td>疑似占用</td>
+                                <td>2024/12/12</td>
+                                <td>王曉明</td>
+                            </tr>
+                            <tr>
+                                <td>1040201-0002-0000009</td>
+                                <td>苗栗市某某區</td>
+                                <td>地段地段</td>
+                                <td>1320</td>
+                                <td>事業用地</td>
+                                <td>苗栗工作站</td>
+                                <td>疑似占用</td>
+                                <td>2024/12/12</td>
+                                <td>王曉明</td>
+                            </tr>
+                            <tr>
+                                <td>1040201-0002-0000009</td>
+                                <td>苗栗市某某區</td>
+                                <td>地段地段</td>
+                                <td>1320</td>
+                                <td>事業用地</td>
+                                <td>苗栗工作站</td>
+                                <td>疑似占用</td>
+                                <td>2024/12/12</td>
+                                <td>王曉明</td>
+                            </tr>
+                            <tr>
+                                <td>1040201-0002-0000009</td>
+                                <td>苗栗市某某區</td>
+                                <td>地段地段</td>
+                                <td>1320</td>
+                                <td>事業用地</td>
+                                <td>苗栗工作站</td>
+                                <td>疑似占用</td>
+                                <td>2024/12/12</td>
+                                <td>王曉明</td>
+                            </tr>
+                            <tr>
+                                <td>1040201-0002-0000009</td>
+                                <td>苗栗市某某區</td>
+                                <td>地段地段</td>
+                                <td>1320</td>
+                                <td>事業用地</td>
+                                <td>苗栗工作站</td>
+                                <td>疑似占用</td>
+                                <td>2024/12/12</td>
+                                <td>王曉明</td>
+                            </tr>
+                            <tr>
+                                <td>1040201-0002-0000009</td>
+                                <td>苗栗市某某區</td>
+                                <td>地段地段</td>
+                                <td>1320</td>
+                                <td>事業用地</td>
+                                <td>苗栗工作站</td>
+                                <td>疑似占用</td>
+                                <td>2024/12/12</td>
+                                <td>王曉明</td>
+                            </tr>
+                            <tr>
+                                <td>1040201-0002-0000009</td>
+                                <td>苗栗市某某區</td>
+                                <td>地段地段</td>
+                                <td>1320</td>
+                                <td>事業用地</td>
+                                <td>苗栗工作站</td>
+                                <td>疑似占用</td>
+                                <td>2024/12/12</td>
+                                <td>王曉明</td>
+                            </tr>
+                            <tr>
+                                <td>1040201-0002-0000009</td>
+                                <td>苗栗市某某區</td>
+                                <td>地段地段</td>
+                                <td>1320</td>
+                                <td>事業用地</td>
+                                <td>苗栗工作站</td>
+                                <td>疑似占用</td>
+                                <td>2024/12/12</td>
+                                <td>王曉明</td>
+                            </tr>
+                            <tr>
+                                <td>1040201-0002-0000009</td>
+                                <td>苗栗市某某區</td>
+                                <td>地段地段</td>
+                                <td>1320</td>
+                                <td>事業用地</td>
+                                <td>苗栗工作站</td>
+                                <td>疑似占用</td>
+                                <td>2024/12/12</td>
+                                <td>王曉明</td>
+                            </tr>
+                            <tr>
+                                <td>1040201-0002-0000009</td>
+                                <td>苗栗市某某區</td>
+                                <td>地段地段</td>
+                                <td>1320</td>
+                                <td>事業用地</td>
+                                <td>苗栗工作站</td>
+                                <td>疑似占用</td>
+                                <td>2024/12/12</td>
+                                <td>王曉明</td>
+                            </tr>
+                            <tr>
+                                <td>1040201-0002-0000009</td>
+                                <td>苗栗市某某區</td>
+                                <td>地段地段</td>
+                                <td>1320</td>
+                                <td>事業用地</td>
+                                <td>苗栗工作站</td>
+                                <td>疑似占用</td>
+                                <td>2024/12/12</td>
+                                <td>王曉明</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="table-page-info fs-7">
+                        <span class="border-end border-gray-400 pe-3 me-3">共 17 筆</span>
+                        每頁顯示
+                        <label for="pageNumber" class="visually-hidden">筆數</label>
+                        <input type="text" class="form-control form-control-sm mx-2 py-0 text-center" id="pageNumber" value="15"
+                            style="width:58px;min-height: 30px;" title="筆數">筆
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        //footable功能
+        $('.table-export').footable({
+            "paging": {
+                "enabled": true,
+                "size": 15,
+            },
+            "sorting": {
+                "enabled": false
+            }
+        });
+    });
+</script>
+</body>
+
+</html>

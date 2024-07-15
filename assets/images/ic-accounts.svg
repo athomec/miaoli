@@ -1,0 +1,13 @@
+<svg id="ic-accounts" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g id="Group_657" data-name="Group 657">
+    <rect id="Rectangle_697" data-name="Rectangle 697" width="20" height="20" fill="none"/>
+  </g>
+  <g id="Group_659" data-name="Group 659" transform="translate(0.833 3.333)">
+    <g id="Group_658" data-name="Group 658">
+      <path id="Path_2021" data-name="Path 2021" d="M16.67,13.13a3.876,3.876,0,0,1,1.942,3.225v2.5h3.333v-2.5C21.945,14.538,18.97,13.463,16.67,13.13Z" transform="translate(-3.612 -5.522)" fill="#5eb4f1"/>
+      <path id="Path_2022" data-name="Path 2022" d="M14.778,10.667a3.333,3.333,0,0,0,0-6.667,3.482,3.482,0,0,0-1.108.2,4.983,4.983,0,0,1,0,6.267A3.482,3.482,0,0,0,14.778,10.667Z" transform="translate(-3.112 -4)" fill="#5eb4f1"/>
+      <path id="Path_2023" data-name="Path 2023" d="M8.333,10.667A3.333,3.333,0,1,0,5,7.333,3.332,3.332,0,0,0,8.333,10.667Zm0-5A1.667,1.667,0,1,1,6.667,7.333,1.672,1.672,0,0,1,8.333,5.667Z" transform="translate(-1.667 -4)" fill="#5eb4f1"/>
+      <path id="Path_2024" data-name="Path 2024" d="M7.667,13C5.442,13,1,14.117,1,16.333v2.5H14.333v-2.5C14.333,14.117,9.892,13,7.667,13Zm5,4.167h-10v-.825c.167-.6,2.75-1.675,5-1.675s4.833,1.075,5,1.667Z" transform="translate(-1 -5.5)" fill="#5eb4f1"/>
+    </g>
+  </g>
+</svg>

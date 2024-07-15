@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+
+<head>
+	<title>土地普查資訊管理系統</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="keywords" content="土地普查資訊管理系統,土地普查,管理系統,水利署苗栗管理處">
+	<meta name="description" content="土地普查資訊管理系統" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta property="og:site_name" content="土地普查資訊管理系統" />
+	<meta property="og:image" content="assets/images/fb-img.png" />
+	<!--FB分享設定-->
+
+	<link rel="icon" href="assets/images/favicon.svg" type="image/ico" />
+	<!--iconfont設定-->
+	<link rel="stylesheet" href="assets/style/all.css">
+	<link rel="stylesheet"
+		href="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.0/css/smoothness/jquery-ui-1.10.0.custom.min.css" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+	<!--css設定-->
+</head>
+
+<body class="scrollbar">
+	<!-- SCRIPTS -->
+	<script src="assets/js/jquery-3.3.1.min.js"></script>
+	<script src="assets/js/bootstrap.bundle.js"></script>
+	<script src="assets/js/script.js"></script>
+	<script src="assets/js/footable.js"></script>
+	<script src="assets/js/moment-with-locales.min.js"></script>
+	<script src="assets/js/tempusdominus-bootstrap-4.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.0/jquery-ui.js"></script>
+	<script type="text/javascript">
+		$(function () {
+			function RESIZE() {
+				var WINDOW = $(window).width();
+				if (WINDOW < 768) {
+					$(".js-side-menu").addClass("close");
+					$(".js-side-content").addClass("close");
+				}else{
+					$(".js-side-menu").removeClass("close");
+					$(".js-side-content").removeClass("close");
+				}
+			}
+
+			// Initial call
+			RESIZE();
+
+			$(window).resize(function () {
+				RESIZE();
+			});
+			//拖曳功能
+			$(".js-draggable").draggable();
+			//日期功能
+			var options = {
+				locale: 'zh-tw',
+				defaultDate: new Date(),
+				format: 'L',
+				icons: {
+					time: "bi bi-clock",
+					date: "bi bi-calendar",
+					up: "bi bi-arrow-up",
+					down: "bi bi-arrow-down",
+					previous: "bi bi-chevron-left",
+					next: "bi bi-chevron-right",
+					today: "bi bi-clock",
+					clear: "bi bi-trash3"
+				},
+				widgetPositioning: {
+					vertical: 'bottom',
+				}
+			};
+			$('#exportFrom, #exportTo').datetimepicker(options);
+			//拉霸控制項
+			updateProgress();
+			function updateProgress() {
+				var rangeContainers = document.querySelectorAll('.range-group');
+				rangeContainers.forEach(function (container) {
+					var range = container.querySelector('.form-range');
+					var progress = container.querySelector('.progress-bar');
+					range.addEventListener('input', function () {
+						var value = this.value;
+						progress.style.width = value + '%';
+						progress.setAttribute('aria-valuenow', value);
+						progress.setAttribute('style', 'width: ' + value + '%;');
+					});
+				});
+			}
+		});
+		//iframe高度控制
+		function reinitIframe(item) {
+			var iframe = document.getElementById(item);
+			try {
+				var bHeight = iframe.contentWindow.document.body.scrollHeight;
+				var dHeight = iframe.contentWindow.document.documentElement.scrollHeight;
+				var height = Math.max(bHeight, dHeight);
+				iframe.height = height;
+				console.log(height);
+			} catch (ex) { }
+		}
+	</script>
+	<script type="text/javascript">
+		$(".js-side-info-body").find('button').click(function () {
+			let linkTarget = $(this).attr("data-bs-target");
+			window.parent.$(linkTarget).modal("show");
+		});
+	</script>
+	<!-- 條件查詢視窗 -->
+<div class="modal fade" tabindex="-1" id="info-search">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <button type="button" class="btn-close ms-1" data-bs-dismiss="modal">
+                <img src="./assets/images/ic-close.svg">
+            </button>
+            <iframe src="modal-info-search.html" frameborder="0" scrolling="no" id="infoSearch" onload="this.height=100">
+            </iframe>
+            <script type="text/javascript">
+                window.setInterval("reinitIframe('infoSearch')", 200);
+            </script>
+        </div>
+    </div>
+</div>
+<!-- 條件查詢視窗結束 -->
+<!--編輯視窗開始-->
+<button data-bs-toggle="modal" data-bs-target="#edit" id="edit-toggler" class="d-none">打開編輯視窗</button>
+<div class="modal fade" id="edit" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content scrollbar" style="height: calc(100vh - 80px);">
+            <button type="button" class="btn-close" data-bs-dismiss="modal">
+                <img src="./assets/images/ic-close.svg" alt="close">
+            </button>
+            <iframe src="modal-info-edit.html" frameborder="0" scrolling="yes" id="modalEdit" height="100%">
+            </iframe>
+        </div>
+    </div>
+</div>
+<!--編輯視窗結束-->
+<!--檢視視窗開始-->
+<button data-bs-toggle="modal" data-bs-target="#view" id="view-toggler" class="d-none">打開檢視視窗</button>
+<div class="modal fade" id="view" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content scrollbar" style="height: calc(100vh - 80px);">
+            <button type="button" class="btn-close" data-bs-dismiss="modal">
+                <img src="./assets/images/ic-close.svg" alt="close">
+            </button>
+            <iframe src="modal-info-view.html" frameborder="0" scrolling="yes" id="modalEdit" height="100%">
+            </iframe>
+        </div>
+    </div>
+</div>
+<!--檢視視窗結束-->
+<!-- 照片視窗開始 -->
+<div class="modal fade" id="photoBox" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+          <button type="button" class="btn-close" data-bs-dismiss="modal"><img src="./assets/images/ic-close-gray.svg" alt="icon"></button>
+        <div class="modal-body py-0">
+          <img src="./assets/images/demo-pic.jpg" alt="照片" class="w-100">
+        </div>
+        <div class="modal-footer align-items-center border-0">
+            <button class="btn btn-sm btn-outline-primary-dark me-2 d-flex align-items-center">
+                <img src="./assets/images/ic-copy.svg" alt="icon">複製座標
+            </button>
+            <p>12345.1234568 , 789456.78946</p>
+            <button type="button" class="btn btn-quaternary text-white d-flex align-items-center ms-auto px-4 py-1">
+                <img src="./assets/images/ic-guide-sm.svg" alt="icon" class="me-2">導航
+            </button>
+            <button type="button" class="btn btn-primary text-white d-flex align-items-center px-4 py-1" data-bs-dismiss="modal">
+                <img src="./assets/images/ic-close-sm.svg" alt="icon" class="me-2">關閉
+            </button>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- 照片視窗結束 -->
+ <!--查詢匯出清冊視窗開始-->
+<div class="modal fade" id="export" tabindex="-1">
+    <div class="modal-dialog modal-xxl modal-dialog-centered">
+        <div class="modal-content scrollbar" style="height: calc(100vh - 80px);">
+            <button type="button" class="btn-close" data-bs-dismiss="modal">
+                <img src="./assets/images/ic-close.svg" alt="close">
+            </button>
+            <iframe src="modal-info-export.html" frameborder="0" scrolling="yes" id="modalEdit" height="100%">
+            </iframe>
+        </div>
+    </div>
+</div>
+<!--查詢匯出清冊視窗結束-->
+
+
+
+<header>
+    <nav class="navbar navbar-expand-lg fixed-top bg-white">
+        <div class="container-fluid px-0 justify-content-start">
+            <a class="navbar-brand d-flex white ps-2 ps-md-3" href="index.html">
+                <img src="./assets/images/logo.svg" alt="logo" class="navbar-brand-logo">
+                <img src="./assets/images/login-title.svg" alt="土地普查資訊管理系統" class="navbar-brand-title">
+            </a>
+            <button class="navbar-toggler border-0 px-1 ms-auto js-side-menu-toggler" type="button"
+                data-target="#side-menu">
+                <img src="./assets/images/ic-bar.svg" alt="選單">
+            </button>
+            <button class="navbar-toggler border-0 px-1" type="button" data-bs-toggle="collapse"
+                data-bs-target="#top-menu">
+                <img src="./assets/images/ic-tools.svg" alt="工具">
+            </button>
+            <button class="navbar-toggler border-0 px-1" type="button" data-bs-toggle="collapse"
+                data-bs-target="#member-menu">
+                <img src="./assets/images/ic-member-menu.svg" alt="會員">
+            </button>
+
+            <div class="collapse navbar-collapse ms-auto flex-grow-0" id="top-menu" data-bs-parent=".navbar">
+                <ul class="navbar-nav">
+                    <li class="me-2">
+                        <div class="input-group search-input-group mb-2 mb-lg-0">
+                            <input type="text" class="form-control" placeholder="關鍵字搜尋">
+                            <button class="btn py-1" type="button" id="button-addon2">
+                                <img src="./assets/images/ic-search.svg" alt="搜尋">
+                            </button>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" title="清除圖示">
+                            <img src="./assets/images/ic-unlocate.svg" alt="清除圖示"><p>清除圖示</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" title="測量功能">
+                            <img src="./assets/images/ic-size.svg" alt="測量功能"><p>測量功能</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" title="地圖出圖">
+                            <img src="./assets/images/ic-image.svg" alt="地圖出圖"><p>地圖出圖</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="collapse navbar-collapse flex-grow-0" id="member-menu" data-bs-parent=".navbar">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" title="變更密碼" data-style="dark">
+                            <img src="./assets/images/ic-lock.svg" alt="變更密碼"><p>變更密碼</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link collapsed js-member-toggle" href="#member" title="會員資料" data-style="dark" data-bs-toggle="collapse"
+                            collapsed>
+                            <img src="./assets/images/ic-member.svg" alt="會員資料"><p>會員資料</p>
+                        </a>
+                        <div class="collapse nav-dropdown" id="member">
+                            <h2 class="nav-dropdown-title pb-0">member 您好</h2>
+                            <ul class="nav-dropdown-info">
+                                <li><img src="./assets/images/ic-user-name.svg" alt="會員名稱" class="me-2">
+                                    <p>名稱名稱名稱</p>
+                                </li>
+                                <li><img src="./assets/images/ic-mail.svg" alt="會員信箱" class="me-2">
+                                    <p>emmawu@geoforce.com.tw</p>
+                                </li>
+                                <li><img src="./assets/images/ic-unit.svg" alt="會員科室" class="me-2">
+                                    <p>測試科室</p>
+                                </li>
+                            </ul>
+                            <ul class="nav-dropdown-list js-nav-dropdown-list">
+                                <li>
+                                    <a href="#" class="nav-dropdown-list-link"><img
+                                            src="./assets/images/ic-accounts.svg" alt="帳號管理" class="me-2"> 帳號管理</a>
+                                </li>
+                                <li>
+                                    <a href="#" class="nav-dropdown-list-link" data-bs-toggle="modal"
+                                        data-bs-target="#backstage">
+                                        <img src="./assets/images/ic-permissions.svg" alt="權限管理" class="me-2"> 權限管理
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="nav-dropdown-list-link">
+                                        <img src="./assets/images/ic-roles.svg" alt="角色管理" class="me-2"> 角色管理
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#all-info" class="nav-dropdown-list-link js-side-info-full js-opener" onclick="window.open('side-info-layer-manage-list.html', 'allInfo')">
+                                        <img src="./assets/images/ic-layers.svg" alt="圖層管理" class="me-2"> 圖層管理
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="nav-dropdown-list-link">
+                                        <img src="./assets/images/ic-year-check.svg" alt="普查年度管理" class="me-2"> 普查年度管理
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="nav-dropdown-list-link">
+                                        <img src="./assets/images/ic-import.svg" alt="普查資料匯入" class="me-2"> 普查資料匯入
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item border-0">
+                        <a class="nav-link" href="login.html" title="登出" data-style="dark">
+                            <img src="./assets/images/ic-logout.svg" alt="登出"><p>登出</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </nav>
+</header>
+
+<!-----側邊選單開始----->
+<div class="d-flex">
+    <div class="side-menu js-side-menu" id="side-menu">
+        <button class="btn side-menu-toggler js-side-menu-toggler js-map-inside-toggler d-none d-md-flex" type="button">
+            <img src="./assets/images/ic-chevron-left.svg" alt="導引列表icon">
+        </button>
+        <div class="side-menu-body scroll">
+            <div class="accordion" id="accordionGroup">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapse1" aria-expanded="true" aria-controls="collapse1">
+                            <img src="./assets/images/ic-layer.svg" alt="圖層清單icon" class="me-2 me-md-3"> 圖層清單
+                        </button>
+                    </h2>
+                    <div id="collapse1" class="accordion-collapse collapse" data-bs-parent="#accordionGroup">
+                        <div class="accordion-body" data-con="text">
+                            <button class="accordion-button accordion-sub collapsed" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#collapse1-1">
+                                地籍圖
+                            </button>
+                            <div id="collapse1-1" class="accordion-collapse collapse" data-bs-parent="#collapse1">
+                                <button class="accordion-button accordion-subsub collapsed" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#collapse1-1-1">
+                                    地籍圖地籍圖
+                                </button>
+                                <div id="collapse1-1-1" class="accordion-collapse collapse"
+                                    data-bs-parent="#collapse1-1">
+                                    <div class="py-2">
+                                        <div class="form-check mb-1">
+                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                            <label class="form-check-label" for="defaultCheck1">
+                                                地籍圖地籍圖地籍圖
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-1">
+                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
+                                            <label class="form-check-label" for="defaultCheck2">
+                                                地籍圖地籍圖地籍圖
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck3">
+                                            <label class="form-check-label" for="defaultCheck3">
+                                                地籍圖地籍圖地籍圖
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="accordion-button accordion-sub collapsed" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#collapse1-2">
+                                地段
+                            </button>
+                            <div id="collapse1-2" class="accordion-collapse collapse" data-bs-parent="#collapse1">
+                                <button class="accordion-button accordion-subsub collapsed" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#collapse1-2-1">
+                                    地段地段
+                                </button>
+                                <div id="collapse1-2-1" class="accordion-collapse collapse"
+                                    data-bs-parent="#collapse1-2">
+                                    <div class="py-2">
+                                        <div class="form-check mb-1">
+                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck4">
+                                            <label class="form-check-label" for="defaultCheck4">
+                                                地段地段(110)
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-1">
+                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck5">
+                                            <label class="form-check-label" for="defaultCheck5">
+                                                地段地段(110)
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck6">
+                                            <label class="form-check-label" for="defaultCheck6">
+                                                地段地段(110)
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="accordion-button accordion-subsub collapsed" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#collapse1-2-2">
+                                    文字文字
+                                </button>
+                                <div id="collapse1-2-2" class="accordion-collapse collapse"
+                                    data-bs-parent="#collapse1-2">
+                                    <div class="py-2">
+                                        <div class="form-check mb-1">
+                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck7">
+                                            <label class="form-check-label" for="defaultCheck7">
+                                                文字文字文字
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-1">
+                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck8">
+                                            <label class="form-check-label" for="defaultCheck8">
+                                                文字文字文字
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck9">
+                                            <label class="form-check-label" for="defaultCheck9">
+                                                文字文字文字
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="accordion-button accordion-sub collapsed" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#collapse1-3">
+                                縣市界
+                            </button>
+                            <div id="collapse1-3" class="accordion-collapse collapse" data-bs-parent="#collapse1">
+                                <button class="accordion-button accordion-subsub collapsed" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#collapse1-3-1">
+                                    縣市界縣市界
+                                </button>
+                                <div id="collapse1-3-1" class="accordion-collapse collapse"
+                                    data-bs-parent="#collapse1-3">
+                                    <div class="py-2">
+                                        <div class="form-check mb-1">
+                                            <input class="form-check-input" type="checkbox" value=""
+                                                id="defaultCheck10">
+                                            <label class="form-check-label" for="defaultCheck10">
+                                                縣市界縣市界縣市界
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-1">
+                                            <input class="form-check-input" type="checkbox" value=""
+                                                id="defaultCheck11">
+                                            <label class="form-check-label" for="defaultCheck11">
+                                                縣市界縣市界縣市界
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value=""
+                                                id="defaultCheck12">
+                                            <label class="form-check-label" for="defaultCheck12">
+                                                縣市界縣市界縣市界
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="accordion-button accordion-sub collapsed" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#collapse1-4">
+                                鄉鎮市區界
+                            </button>
+                            <div id="collapse1-4" class="accordion-collapse collapse" data-bs-parent="#collapse1">
+                                <button class="accordion-button accordion-subsub collapsed" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#collapse1-4-1">
+                                    鄉鎮市區界鄉鎮市區界
+                                </button>
+                                <div id="collapse1-4-1" class="accordion-collapse collapse"
+                                    data-bs-parent="#collapse1-4">
+                                    <div class="py-2">
+                                        <div class="form-check mb-1">
+                                            <input class="form-check-input" type="checkbox" value=""
+                                                id="defaultCheck13">
+                                            <label class="form-check-label" for="defaultCheck13">
+                                                鄉鎮市區界鄉鎮市區界鄉鎮市區界
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-1">
+                                            <input class="form-check-input" type="checkbox" value=""
+                                                id="defaultCheck14">
+                                            <label class="form-check-label" for="defaultCheck14">
+                                                鄉鎮市區界鄉
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value=""
+                                                id="defaultCheck15">
+                                            <label class="form-check-label" for="defaultCheck15">
+                                                鄉鎮市區界鄉鎮
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="accordion-button accordion-sub collapsed" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#collapse1-5">
+                                村里界
+                            </button>
+                            <div id="collapse1-5" class="accordion-collapse collapse" data-bs-parent="#collapse1">
+                                <button class="accordion-button accordion-subsub collapsed" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#collapse1-5-1">
+                                    村里界村里界
+                                </button>
+                                <div id="collapse1-5-1" class="accordion-collapse collapse"
+                                    data-bs-parent="#collapse1-5">
+                                    <div class="py-2">
+                                        <div class="form-check mb-1">
+                                            <input class="form-check-input" type="checkbox" value=""
+                                                id="defaultCheck16">
+                                            <label class="form-check-label" for="defaultCheck16">
+                                                村里界村里界村里界
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-1">
+                                            <input class="form-check-input" type="checkbox" value=""
+                                                id="defaultCheck17">
+                                            <label class="form-check-label" for="defaultCheck17">
+                                                村里界村里界村里界
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value=""
+                                                id="defaultCheck18">
+                                            <label class="form-check-label" for="defaultCheck18">
+                                                村里界村里界村里界
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
+                            <img src="./assets/images/ic-locate.svg" alt="定位功能icon" class="me-2 me-md-3"> 定位功能
+                        </button>
+                    </h2>
+                    <div id="collapse2" class="accordion-collapse collapse" data-bs-parent="#accordionGroup">
+                        <div class="accordion-body">
+                            <div class="accordion-item">
+                                <button class="accordion-button accordion-sub" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapse2-1" data-icon="single-icon">
+                                    <img src="./assets/images/ic-district.svg" alt="行政區定位"> 行政區定位
+                                </button>
+                                <div id="collapse2-1" class="accordion-collapse collapse" data-bs-parent="#collapse2">
+                                    <div class="pt-3">
+                                        <div class="d-flex align-items-center flex-nowrap mb-3">
+                                            <label for="city" class="form-label flex-shrink-0 me-2 mb-0">縣市</label>
+                                            <select class="form-select w-100 form-select-sm" id="city">
+                                                <option selected>請選擇</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>
+                                        <div class="d-flex align-items-center flex-nowrap mb-3">
+                                            <label for="town" class="form-label flex-shrink-0 me-2 mb-0">鄉鎮</label>
+                                            <select class="form-select w-100 form-select-sm" id="town">
+                                                <option selected>請選擇</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>
+                                        <div class="d-flex align-items-center flex-nowrap mb-3">
+                                            <label for="village" class="form-label flex-shrink-0 me-2 mb-0">村里</label>
+                                            <select class="form-select w-100 form-select-sm" id="village">
+                                                <option selected>請選擇</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>
+
+                                        <button class="btn btn-sm btn-primary fs-6 text-white w-100 mb-3">定位</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <button class="accordion-button accordion-sub" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapse2-2" data-icon="single-icon">
+                                    <img src="./assets/images/ic-oordinate.svg" alt="坐標定位"> 坐標定位
+                                </button>
+                                <div id="collapse2-2" class="accordion-collapse collapse" data-bs-parent="#collapse2">
+                                    <div class="pt-3">
+                                        <div class="d-flex align-items-center flex-nowrap mb-3">
+                                            <label for="city" class="form-label flex-shrink-0 me-2 mb-0">縣市</label>
+                                            <select class="form-select w-100 form-select-sm" id="city">
+                                                <option selected>請選擇</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>
+                                        <div class="d-flex align-items-center flex-nowrap mb-3">
+                                            <label for="town" class="form-label flex-shrink-0 me-2 mb-0">鄉鎮</label>
+                                            <select class="form-select w-100 form-select-sm" id="town">
+                                                <option selected>請選擇</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>
+                                        <div class="d-flex align-items-center flex-nowrap mb-3">
+                                            <label for="village" class="form-label flex-shrink-0 me-2 mb-0">村里</label>
+                                            <select class="form-select w-100 form-select-sm" id="village">
+                                                <option selected>請選擇</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>
+
+                                        <button class="btn btn-sm btn-primary fs-6 text-white w-100 mb-3">定位</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <button class="accordion-button accordion-sub" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapse2-3" data-icon="single-icon">
+                                    <img src="./assets/images/ic-address.svg" alt="地籍定位"> 地籍定位
+                                </button>
+                                <div id="collapse2-3" class="accordion-collapse collapse" data-bs-parent="#collapse2">
+                                    <div class="pt-3">
+                                        <div class="d-flex align-items-center flex-nowrap mb-3">
+                                            <label for="city" class="form-label flex-shrink-0 me-2 mb-0">縣市</label>
+                                            <select class="form-select w-100 form-select-sm" id="city">
+                                                <option selected>請選擇</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>
+                                        <div class="d-flex align-items-center flex-nowrap mb-3">
+                                            <label for="town" class="form-label flex-shrink-0 me-2 mb-0">鄉鎮</label>
+                                            <select class="form-select w-100 form-select-sm" id="town">
+                                                <option selected>請選擇</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>
+                                        <div class="d-flex align-items-center flex-nowrap mb-3">
+                                            <label for="village" class="form-label flex-shrink-0 me-2 mb-0">村里</label>
+                                            <select class="form-select w-100 form-select-sm" id="village">
+                                                <option selected>請選擇</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>
+
+                                        <button class="btn btn-sm btn-primary fs-6 text-white w-100 mb-3">定位</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapse3">
+                            <img src="./assets/images/ic-incheck.svg" alt="內業普查icon" class="me-2 me-md-3"> 內業普查
+                        </button>
+                    </h2>
+                    <div id="collapse3" class="accordion-collapse collapse" data-bs-parent="#accordionGroup">
+                        <div class="accordion-body">
+                            <div class="accordion-item">
+                                <button class="accordion-button accordion-sub" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapse3-1" data-icon="single-icon">
+                                    <img src="./assets/images/ic-report.svg" alt="內業普查填報"> 內業普查填報
+                                </button>
+                                <div id="collapse3-1" class="accordion-collapse collapse" data-bs-parent="#collapse3">
+                                    <div class="pt-3">
+                                        <div class="d-flex align-items-center flex-nowrap mb-3">
+                                            <label for="city" class="form-label flex-shrink-0 me-2 mb-0">縣市</label>
+                                            <select class="form-select w-100 form-select-sm" id="city">
+                                                <option selected>請選擇</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>
+                                        <div class="d-flex align-items-center flex-nowrap mb-3">
+                                            <label for="town" class="form-label flex-shrink-0 me-2 mb-0">鄉鎮</label>
+                                            <select class="form-select w-100 form-select-sm" id="town">
+                                                <option selected>請選擇</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>
+                                        <div class="d-flex align-items-center flex-nowrap mb-3">
+                                            <label for="village" class="form-label flex-shrink-0 me-2 mb-0">村里</label>
+                                            <select class="form-select w-100 form-select-sm" id="village">
+                                                <option selected>請選擇</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>
+
+                                        <button class="btn btn-sm btn-primary fs-6 text-white w-100 mb-3">定位</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <button class="accordion-button accordion-sub" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapse3-2" data-icon="single-icon">
+                                    <img src="./assets/images/ic-check-export.svg" alt="查詢匯出清冊"> 查詢匯出清冊
+                                </button>
+                                <div id="collapse3-2" class="accordion-collapse collapse" data-bs-parent="#collapse3">
+                                    <div class="pt-3">
+                                        <div class="d-flex align-items-center flex-nowrap mb-3">
+                                            <label for="city" class="form-label flex-shrink-0 me-2 mb-0">縣市</label>
+                                            <select class="form-select w-100 form-select-sm" id="city">
+                                                <option selected>請選擇</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>
+                                        <div class="d-flex align-items-center flex-nowrap mb-3">
+                                            <label for="town" class="form-label flex-shrink-0 me-2 mb-0">鄉鎮</label>
+                                            <select class="form-select w-100 form-select-sm" id="town">
+                                                <option selected>請選擇</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>
+                                        <div class="d-flex align-items-center flex-nowrap mb-3">
+                                            <label for="village" class="form-label flex-shrink-0 me-2 mb-0">村里</label>
+                                            <select class="form-select w-100 form-select-sm" id="village">
+                                                <option selected>請選擇</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>
+
+                                        <button class="btn btn-sm btn-primary fs-6 text-white w-100 mb-3">定位</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapse4">
+                            <img src="./assets/images/ic-outcheck.svg" alt="外業占用勘查icon" class="me-2 me-md-3"> 外業占用勘查
+                        </button>
+                    </h2>
+                    <div id="collapse4" class="accordion-collapse collapse" data-bs-parent="#accordionGroup">
+                        <div class="accordion-body">
+                            <div class="accordion-item">
+                                <button class="accordion-button accordion-sub" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapse4-1" data-icon="single-icon">
+                                    <img src="./assets/images/ic-occupy.svg" alt="占用勘查填報"> 占用勘查填報
+                                </button>
+                                <div id="collapse4-1" class="accordion-collapse collapse" data-bs-parent="#collapse4">
+                                    <div class="pt-3">
+                                        <div class="d-flex align-items-center flex-nowrap mb-3">
+                                            <label for="city" class="form-label flex-shrink-0 me-2 mb-0">縣市</label>
+                                            <select class="form-select w-100 form-select-sm" id="city">
+                                                <option selected>請選擇</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>
+                                        <div class="d-flex align-items-center flex-nowrap mb-3">
+                                            <label for="town" class="form-label flex-shrink-0 me-2 mb-0">鄉鎮</label>
+                                            <select class="form-select w-100 form-select-sm" id="town">
+                                                <option selected>請選擇</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>
+                                        <div class="d-flex align-items-center flex-nowrap mb-3">
+                                            <label for="village" class="form-label flex-shrink-0 me-2 mb-0">村里</label>
+                                            <select class="form-select w-100 form-select-sm" id="village">
+                                                <option selected>請選擇</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>
+
+                                        <button class="btn btn-sm btn-primary fs-6 text-white w-100 mb-3 js-btn-all-info" onclick="window.open('side-info-outcheck-list.html', 'allInfo')">定位</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <button class="accordion-button accordion-sub" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapse4-2" data-icon="single-icon">
+                                    <img src="./assets/images/ic-check-export.svg" alt="查詢匯出清冊"> 查詢匯出清冊
+                                </button>
+                                <div id="collapse4-2" class="accordion-collapse collapse" data-bs-parent="#collapse4">
+                                    <div class="pt-3">
+                                        <div class="d-flex align-items-center flex-nowrap mb-3">
+                                            <label for="city" class="form-label flex-shrink-0 me-2 mb-0">縣市</label>
+                                            <select class="form-select w-100 form-select-sm" id="city">
+                                                <option selected>請選擇</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>
+                                        <div class="d-flex align-items-center flex-nowrap mb-3">
+                                            <label for="town" class="form-label flex-shrink-0 me-2 mb-0">鄉鎮</label>
+                                            <select class="form-select w-100 form-select-sm" id="town">
+                                                <option selected>請選擇</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>
+                                        <div class="d-flex align-items-center flex-nowrap mb-3">
+                                            <label for="village" class="form-label flex-shrink-0 me-2 mb-0">村里</label>
+                                            <select class="form-select w-100 form-select-sm" id="village">
+                                                <option selected>請選擇</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>
+
+                                        <button class="btn btn-sm btn-primary fs-6 text-white w-100 mb-3">定位</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-dropdown="none" data-bs-toggle="modal" data-bs-target="#export">
+                            <img src="./assets/images/ic-export-search.svg" alt="查詢匯出清冊" class="me-2 me-md-3"> 查詢匯出清冊
+                        </button>
+                    </h2>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapse6">
+                            <img src="./assets/images/ic-statistics.svg" alt="統計功能" class="me-2 me-md-3"> 統計功能
+                        </button>
+                    </h2>
+                    <div id="collapse6" class="accordion-collapse collapse" data-bs-parent="#accordionGroup">
+                        <div class="accordion-body">
+                            <div class="accordion-item">
+                                <button class="accordion-button accordion-sub" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapse4-1" data-icon="single-icon">
+                                    <img src="./assets/images/ic-indone.svg" alt="內業普查完成率"> 內業普查完成率
+                                </button>
+                                <div id="collapse4-1" class="accordion-collapse collapse" data-bs-parent="#collapse4">
+                                    <div class="pt-3">
+                                        <div class="d-flex align-items-center flex-nowrap mb-3">
+                                            <label for="city" class="form-label flex-shrink-0 me-2 mb-0">縣市</label>
+                                            <select class="form-select w-100 form-select-sm" id="city">
+                                                <option selected>請選擇</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>
+                                        <div class="d-flex align-items-center flex-nowrap mb-3">
+                                            <label for="town" class="form-label flex-shrink-0 me-2 mb-0">鄉鎮</label>
+                                            <select class="form-select w-100 form-select-sm" id="town">
+                                                <option selected>請選擇</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>
+                                        <div class="d-flex align-items-center flex-nowrap mb-3">
+                                            <label for="village" class="form-label flex-shrink-0 me-2 mb-0">村里</label>
+                                            <select class="form-select w-100 form-select-sm" id="village">
+                                                <option selected>請選擇</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>
+
+                                        <button class="btn btn-sm btn-primary fs-6 text-white w-100 mb-3">定位</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <button class="accordion-button accordion-sub" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapse4-2" data-icon="single-icon">
+                                    <img src="./assets/images/ic-outdone.svg" alt="外業勘查完成率"> 外業勘查完成率
+                                </button>
+                                <div id="collapse4-2" class="accordion-collapse collapse" data-bs-parent="#collapse4">
+                                    <div class="pt-3">
+                                        <div class="d-flex align-items-center flex-nowrap mb-3">
+                                            <label for="city" class="form-label flex-shrink-0 me-2 mb-0">縣市</label>
+                                            <select class="form-select w-100 form-select-sm" id="city">
+                                                <option selected>請選擇</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>
+                                        <div class="d-flex align-items-center flex-nowrap mb-3">
+                                            <label for="town" class="form-label flex-shrink-0 me-2 mb-0">鄉鎮</label>
+                                            <select class="form-select w-100 form-select-sm" id="town">
+                                                <option selected>請選擇</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>
+                                        <div class="d-flex align-items-center flex-nowrap mb-3">
+                                            <label for="village" class="form-label flex-shrink-0 me-2 mb-0">村里</label>
+                                            <select class="form-select w-100 form-select-sm" id="village">
+                                                <option selected>請選擇</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>
+
+                                        <button class="btn btn-sm btn-primary fs-6 text-white w-100 mb-3">定位</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-----側邊選單結束----->
+    <!-----主要內容開始----->
+    <div class="side-content js-side-content">
+        <!-----地圖開始----->
+        <div class="map-content-wrapper js-map-content-wrapper">
+            <div class="toast-container js-draggable" data-con="sum">
+                <div class="toast fade fw-semibold w-100" role="alert" id="sumToast">
+                    <div class="toast-header bg-secondary py-1">
+                        <button type="button" class="btn-close btn-close-white ms-auto"
+                            data-bs-dismiss="toast"></button>
+                    </div>
+                    <div class="toast-body bg-white p-0" id="toast-body">
+                        <div class="bg-tertiary d-flex align-items-center px-3 py-2">
+                            <label for="length" class="flex-shrink-0 me-1" style="width: 60px;">長度單位</label>
+                            <select class="form-select form-select-sm me-3 me-sm-4 font-xs" id="length"
+                                style="width: 73px;">
+                                <option selected="">公尺</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                            <label for="area-unit" class="flex-shrink-0 me-1" style="width: 60px;">面積單位</label>
+                            <select class="form-select form-select-sm font-xs" id="area-unit">
+                                <option selected="">平方公尺</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </div>
+                        <div class="d-flex bg-tertiary px-3 pb-2">
+                            <button class="btn btn-dark-secondary-light py-0 me-2 w-100" data-bs-toggle="collapse"
+                                data-bs-target="#todelete">
+                                <img src="./assets/images/ic-ruler.svg" class="me-2">開始測量</button>
+                            <button class="btn btn-dark-secondary px-2 py-0 flex-shrink-0 me-2">
+                                <img src="./assets/images/ic-trash-white.svg" style="width: 24px;">
+                            </button>
+                            <button class="btn btn-dark-$tertiary px-2 py-0 flex-shrink-0" data-bs-toggle="collapse"
+                                data-bs-target="#theinfo">
+                                <img src="./assets/images/ic-info-white.svg" style="width: 24px;">
+                            </button>
+                        </div>
+                        <div class="collapse" id="todelete" data-bs-parent="#toast-body">
+                            <div class="bg-white px-3 py-2">
+                                <ul>
+                                    <li><span class="quaternary me-3">距離</span>123456678.12 公尺</li>
+                                    <li><span class="quaternary me-3">周長</span>123456678.12 公尺</li>
+                                    <li>
+                                        <hr class="bg-quaternary my-1 my-md-2">
+                                    </li>
+                                    <li><span class="quaternary me-3">面積</span>97894561237892 平方公尺</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="collapse" id="theinfo" data-bs-parent="#toast-body">
+                            <div class="bg-white px-3 py-2">
+                                <p>
+                                    *於地圖上點出2點以上位置，點2下結束選取<br>
+                                    *測量結果請記得刪除<br>
+                                    <span class="primary-dark">*灌溉地測量完畢請按「地圖出圖」將測量資料與
+                                        截圖帶入表格中</span>
+                                </p>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="map-content js-map-content">
+                <div class="map-content-inside js-map-inside"
+                    style="background: url('assets/images/map-demo.jpg'); background-size: cover;"></div>
+            </div>
+            <div class="map-compare js-map-content-compare">
+                <div class="map-content-inside js-map-inside"
+                    style="background: url('assets/images/map-demo1.jpg'); background-size: cover;"></div>
+            </div>
+        </div>
+
+        <!-----查有資料開始----->
+        <div class="side-info js-side-info bg-white" id="all-info">
+            <iframe src="side-info-member-land.html" frameborder="0" scrolling="auto" id="allInfo" name="allInfo"
+                onload="this.height=100" class="w-100">
+            </iframe>
+        </div>
+        <!-----查有資料結束----->
+    </div>
+    <!-----主要內容結束----->
+</div>
+<script type="text/javascript">
+    $(function () {
+        //modal層級控制
+        $('#photoBox').on('show.bs.modal', function () {
+        $('.modal-backdrop').not('.custom-backdrop').addClass('custom-backdrop');
+    });
+    $('#photoBox').on('hidden.bs.modal', function () {
+            $('.modal-backdrop.custom-backdrop').removeClass('custom-backdrop');
+        });
+        //iframe高度控制
+		function reinitIframe(item) {
+			var iframe = document.getElementById(item);
+			try {
+				var bHeight = iframe.contentWindow.document.body.scrollHeight;
+				var dHeight = iframe.contentWindow.document.documentElement.scrollHeight;
+				var height = Math.max(bHeight, dHeight);
+				iframe.height = height;
+			} catch (ex) { }
+		}
+
+
+        //地圖比對內容器設定
+        function resizeMapInside() {
+            var mapContentWrapper = document.querySelector('.js-map-content-wrapper');
+            var mapInsideList = document.querySelectorAll('.js-map-inside');
+            var mapWidth = mapContentWrapper.offsetWidth;
+            var mapHeight = mapContentWrapper.offsetHeight;
+
+            for (var i = 0; i < mapInsideList.length; i++) {
+                mapInsideList[i].style.width = mapWidth + 'px';
+                mapInsideList[i].style.height = mapHeight + 'px';
+            }
+        }
+
+        // 初始化
+        resizeMapInside();
+
+        // 監聽元素大小變化
+        var observer = new ResizeObserver(function (entries) {
+            // 如果元素大小變化，就重新計算高度和寬度
+            resizeMapInside();
+        });
+        observer.observe(document.querySelector('.js-map-content-wrapper'));
+
+        $('.js-map-inside-toggler').click(function () {
+            $('.js-map-inside').toggleClass('full');
+        })
+        //測量工具視窗
+        const toastTrigger = document.getElementById('sumToastBtn')
+        const toastLiveExample = document.getElementById('sumToast')
+        if (toastTrigger) {
+            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+            toastTrigger.addEventListener('click', () => {
+                toastBootstrap.show()
+            })
+        }
+
+    });
+</script>
+</body>
+
+</html>

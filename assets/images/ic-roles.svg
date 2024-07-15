@@ -1,0 +1,15 @@
+<svg id="ic-roles" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g id="Group_660" data-name="Group 660">
+    <rect id="Rectangle_698" data-name="Rectangle 698" width="20" height="20" fill="none"/>
+  </g>
+  <g id="Group_662" data-name="Group 662" transform="translate(0 5)">
+    <g id="Group_661" data-name="Group 661">
+      <path id="Path_2025" data-name="Path 2025" d="M14.533,13.5A8.7,8.7,0,0,0,11,12.75a8.842,8.842,0,0,0-3.533.75A2.49,2.49,0,0,0,6,15.783v1.342H16V15.783A2.49,2.49,0,0,0,14.533,13.5ZM7.725,15.458a.8.8,0,0,1,.408-.433,6.994,6.994,0,0,1,2.858-.608,7.1,7.1,0,0,1,2.858.608.772.772,0,0,1,.408.433Z" transform="translate(-1 -7.125)" fill="#5eb4f1"/>
+      <path id="Path_2026" data-name="Path 2026" d="M1.017,14.483A1.676,1.676,0,0,0,0,16.025v1.308H3.75V15.992a3.749,3.749,0,0,1,.525-1.908A5.819,5.819,0,0,0,3.333,14,5.792,5.792,0,0,0,1.017,14.483Z" transform="translate(0 -7.333)" fill="#5eb4f1"/>
+      <path id="Path_2027" data-name="Path 2027" d="M22.128,14.483a5.665,5.665,0,0,0-3.258-.4,3.749,3.749,0,0,1,.525,1.908v1.342h3.75V16.025A1.676,1.676,0,0,0,22.128,14.483Z" transform="translate(-3.145 -7.333)" fill="#5eb4f1"/>
+      <path id="Path_2028" data-name="Path 2028" d="M11.5,11A2.5,2.5,0,1,0,9,8.5,2.5,2.5,0,0,0,11.5,11Zm0-3.333a.833.833,0,1,1-.833.833A.836.836,0,0,1,11.5,7.667Z" transform="translate(-1.5 -6)" fill="#5eb4f1"/>
+      <rect id="Rectangle_699" data-name="Rectangle 699" width="2.95" height="2.95" transform="translate(1.247 4.167) rotate(-45)" fill="#5eb4f1"/>
+      <path id="Path_2029" data-name="Path 2029" d="M19.583,9,17.5,12.333h4.167Z" transform="translate(-2.917 -6.5)" fill="#5eb4f1"/>
+    </g>
+  </g>
+</svg>
