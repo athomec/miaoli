@@ -19618,12 +19618,17 @@ hr {
   margin-top: 42px; }
   @media (max-width: 576px) {
     .modal-body {
-      font-size: 0.9rem; } }
+      font-size: 0.9rem;
+      letter-spacing: -1px; } }
   @media (max-width: 576px) {
     .modal-body .photo-title {
       color: #1074B5;
       font-weight: 600;
       text-align: left !important; } }
+
+@media (max-width: 576px) {
+  .modal-footer p {
+    font-size: 0.9rem; } }
 
 @media (max-width: 576px) {
   .w-mobile-lg-100 {
