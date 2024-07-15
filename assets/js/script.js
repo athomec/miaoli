@@ -10,11 +10,16 @@ $(function () {//JS開頭
 	$('#member').on('click', function () {//會員下拉選單收闔設定
         $(this).collapse('toggle');
     });
-	$('#member-menu').on('click', function () {//手機版主下拉選單收闔設定
-        $(this).collapse('toggle');
+	$('.js-nav-link').on('click', function () {//手機版主下拉選單收闔設定
+        if(WINDOW < 992){
+			$("#member-menu").collapse('toggle');
+		}
     });
 	$('#top-menu').on('click', function () {//手機版主下拉選單收闔設定
-        $(this).collapse('toggle');
+	if(WINDOW < 992){
+			$(this).collapse('toggle');
+		}
+        
     });
 
 	$(".js-side-info-full").click(function () {//開啟底部滿版視窗
