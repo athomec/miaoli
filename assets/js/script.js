@@ -31,6 +31,7 @@ $(function () {//JS開頭
 		window.parent.$(".js-side-info").removeClass("open");
 		window.parent.$(".js-side-info").removeClass("full");
 		window.parent.$(".js-map-content-wrapper").removeClass("hide");
+		window.parent.$(".js-map-content-wrapper").css('height', '');
 	})
 	$(".js-btn-all-info").click(function () {//開啟底部視窗
 		window.parent.$(".js-side-info").addClass("open");
