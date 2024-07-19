@@ -226,7 +226,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" title="測量功能">
+                        <a class="nav-link" href="#" title="測量功能" id="sumToastBtn">
                             <img src="./assets/images/ic-size.svg" alt="測量功能"><p>測量功能</p>
                         </a>
                     </li>
@@ -326,11 +326,43 @@
                     </h2>
                     <div id="collapse1" class="accordion-collapse collapse" data-bs-parent="#accordionGroup">
                         <div class="accordion-body" data-con="text">
+                            <div class="accordion-button accordion-sub" data-con="noCollapse">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="layer1check1">
+                                    <label class="form-check-label" for="layer1check1">
+                                        地籍圖地籍圖地籍圖
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="accordion-button accordion-sub" data-con="noCollapse">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="layer1check2">
+                                    <label class="form-check-label" for="layer1check2">
+                                        地籍圖地籍圖地籍圖
+                                    </label>
+                                </div>
+                            </div>
                             <button class="accordion-button accordion-sub collapsed" type="button"
                                 data-bs-toggle="collapse" data-bs-target="#collapse1-1">
                                 地籍圖
                             </button>
                             <div id="collapse1-1" class="accordion-collapse collapse" data-bs-parent="#collapse1">
+                                <div class="accordion-button accordion-subsub" data-con="noCollapse">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="layer2check1">
+                                        <label class="form-check-label" for="layer2check1">
+                                            地籍圖地籍圖地籍圖
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="accordion-button accordion-subsub" data-con="noCollapse">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="layer2check2">
+                                        <label class="form-check-label" for="layer2check2">
+                                            地籍圖地籍圖地籍圖
+                                        </label>
+                                    </div>
+                                </div>
                                 <button class="accordion-button accordion-subsub collapsed" type="button"
                                     data-bs-toggle="collapse" data-bs-target="#collapse1-1-1">
                                     地籍圖地籍圖
@@ -945,14 +977,14 @@
         <!-----地圖開始----->
         <div class="map-content-wrapper js-map-content-wrapper">
             <div class="toast-container js-draggable" data-con="sum">
-                <div class="toast fade fw-semibold w-100" role="alert" id="sumToast">
-                    <div class="toast-header bg-secondary py-1">
+                <div class="toast fade w-100" role="alert" id="sumToast">
+                    <div class="toast-header bg-primary-light border-0 py-1">
                         <button type="button" class="btn-close btn-close-white ms-auto"
                             data-bs-dismiss="toast"></button>
                     </div>
                     <div class="toast-body bg-white p-0" id="toast-body">
-                        <div class="bg-tertiary d-flex align-items-center px-3 py-2">
-                            <label for="length" class="flex-shrink-0 me-1" style="width: 60px;">長度單位</label>
+                        <div class="d-flex align-items-center px-3 py-2">
+                            <label for="length" class="form-label flex-shrink-0 me-1 mb-0" style="width: 60px;">長度單位</label>
                             <select class="form-select form-select-sm me-3 me-sm-4 font-xs" id="length"
                                 style="width: 73px;">
                                 <option selected="">公尺</option>
@@ -960,7 +992,7 @@
                                 <option value="2">Two</option>
                                 <option value="3">Three</option>
                             </select>
-                            <label for="area-unit" class="flex-shrink-0 me-1" style="width: 60px;">面積單位</label>
+                            <label for="area-unit" class="form-label flex-shrink-0 me-1 mb-0" style="width: 60px;">面積單位</label>
                             <select class="form-select form-select-sm font-xs" id="area-unit">
                                 <option selected="">平方公尺</option>
                                 <option value="1">One</option>
@@ -968,14 +1000,13 @@
                                 <option value="3">Three</option>
                             </select>
                         </div>
-                        <div class="d-flex bg-tertiary px-3 pb-2">
-                            <button class="btn btn-dark-secondary-light py-0 me-2 w-100" data-bs-toggle="collapse"
-                                data-bs-target="#todelete">
+                        <div class="d-flex px-3 pb-2">
+                            <button class="btn btn-secondary d-flex justify-content-center text-white py-0 me-2 w-100" data-bs-toggle="collapse" data-bs-target="#todelete">
                                 <img src="./assets/images/ic-ruler.svg" class="me-2">開始測量</button>
-                            <button class="btn btn-dark-secondary px-2 py-0 flex-shrink-0 me-2">
+                            <button class="btn btn-primary px-2 py-0 flex-shrink-0 me-2">
                                 <img src="./assets/images/ic-trash-white.svg" style="width: 24px;">
                             </button>
-                            <button class="btn btn-dark-$tertiary px-2 py-0 flex-shrink-0" data-bs-toggle="collapse"
+                            <button class="btn btn-primary px-2 py-0 flex-shrink-0" data-bs-toggle="collapse"
                                 data-bs-target="#theinfo">
                                 <img src="./assets/images/ic-info-white.svg" style="width: 24px;">
                             </button>
@@ -983,12 +1014,12 @@
                         <div class="collapse" id="todelete" data-bs-parent="#toast-body">
                             <div class="bg-white px-3 py-2">
                                 <ul>
-                                    <li><span class="quaternary me-3">距離</span>123456678.12 公尺</li>
-                                    <li><span class="quaternary me-3">周長</span>123456678.12 公尺</li>
+                                    <li><span class="text-primary-dark me-3">距離</span>123456678.12 公尺</li>
+                                    <li><span class="text-primary-dark me-3">周長</span>123456678.12 公尺</li>
                                     <li>
                                         <hr class="bg-quaternary my-1 my-md-2">
                                     </li>
-                                    <li><span class="quaternary me-3">面積</span>97894561237892 平方公尺</li>
+                                    <li><span class="text-primary-dark me-3">面積</span>97894561237892 平方公尺</li>
                                 </ul>
                             </div>
                         </div>
@@ -997,7 +1028,7 @@
                                 <p>
                                     *於地圖上點出2點以上位置，點2下結束選取<br>
                                     *測量結果請記得刪除<br>
-                                    <span class="primary-dark">*灌溉地測量完畢請按「地圖出圖」將測量資料與
+                                    <span class="text-primary-dark">*灌溉地測量完畢請按「地圖出圖」將測量資料與
                                         截圖帶入表格中</span>
                                 </p>
                             </div>

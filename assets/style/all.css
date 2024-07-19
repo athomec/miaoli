@@ -5340,6 +5340,72 @@ textarea.form-control-lg {
   -webkit-filter: var(--bs-btn-close-white-filter);
           filter: var(--bs-btn-close-white-filter); }
 
+.toast {
+  --bs-toast-zindex: 1090;
+  --bs-toast-padding-x: 0.75rem;
+  --bs-toast-padding-y: 0.5rem;
+  --bs-toast-spacing: 1.5rem;
+  --bs-toast-max-width: 350px;
+  --bs-toast-font-size: 0.875rem;
+  --bs-toast-color: ;
+  --bs-toast-bg: rgba(var(--bs-body-bg-rgb), 0.85);
+  --bs-toast-border-width: var(--bs-border-width);
+  --bs-toast-border-color: var(--bs-border-color-translucent);
+  --bs-toast-border-radius: var(--bs-border-radius);
+  --bs-toast-box-shadow: var(--bs-box-shadow);
+  --bs-toast-header-color: var(--bs-secondary-color);
+  --bs-toast-header-bg: rgba(var(--bs-body-bg-rgb), 0.85);
+  --bs-toast-header-border-color: var(--bs-border-color-translucent);
+  width: var(--bs-toast-max-width);
+  max-width: 100%;
+  font-size: var(--bs-toast-font-size);
+  color: var(--bs-toast-color);
+  pointer-events: auto;
+  background-color: var(--bs-toast-bg);
+  background-clip: padding-box;
+  border: var(--bs-toast-border-width) solid var(--bs-toast-border-color);
+  -webkit-box-shadow: var(--bs-toast-box-shadow);
+          box-shadow: var(--bs-toast-box-shadow);
+  border-radius: var(--bs-toast-border-radius); }
+  .toast.showing {
+    opacity: 0; }
+  .toast:not(.show) {
+    display: none; }
+
+.toast-container {
+  --bs-toast-zindex: 1090;
+  position: absolute;
+  z-index: var(--bs-toast-zindex);
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  max-width: 100%;
+  pointer-events: none; }
+  .toast-container > :not(:last-child) {
+    margin-bottom: var(--bs-toast-spacing); }
+
+.toast-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: var(--bs-toast-padding-y) var(--bs-toast-padding-x);
+  color: var(--bs-toast-header-color);
+  background-color: var(--bs-toast-header-bg);
+  background-clip: padding-box;
+  border-bottom: var(--bs-toast-border-width) solid var(--bs-toast-header-border-color);
+  border-top-left-radius: calc(var(--bs-toast-border-radius) - var(--bs-toast-border-width));
+  border-top-right-radius: calc(var(--bs-toast-border-radius) - var(--bs-toast-border-width)); }
+  .toast-header .btn-close {
+    margin-right: calc(-.5 * var(--bs-toast-padding-x));
+    margin-left: var(--bs-toast-padding-x); }
+
+.toast-body {
+  padding: var(--bs-toast-padding-x);
+  word-wrap: break-word; }
+
 .modal {
   --bs-modal-zindex: 1055;
   --bs-modal-width: 500px;
@@ -16148,6 +16214,10 @@ select[disabled] {
   select ~ label {
     font-size: 0.9rem !important; } }
 
+@media (max-width: 576px) {
+  label {
+    font-size: 0.9rem !important; } }
+
 /*------------------------登入頁設定開始----------------------------*/
 .wrapper[data-bg="login"] {
   min-height: 100vh;
@@ -16912,6 +16982,8 @@ footer .footer-logo {
       .side-menu .accordion-sub {
         padding-left: 16px;
         padding-right: 12px; } }
+    .side-menu .accordion-sub:after {
+      display: none; }
     .side-menu .accordion-sub.collapsed {
       padding-bottom: 16px; }
       .side-menu .accordion-sub.collapsed img {
@@ -16962,6 +17034,12 @@ footer .footer-logo {
           .side-menu .accordion-body[data-con="text"] .accordion-sub:not(.collapsed):after {
             background: url("../images/ic-folder-close.svg") no-repeat !important;
             background-size: cover; }
+        .side-menu .accordion-body[data-con="text"] .accordion-sub[data-con="noCollapse"] {
+          padding-left: 20px; }
+          .side-menu .accordion-body[data-con="text"] .accordion-sub[data-con="noCollapse"]:after {
+            display: none; }
+          .side-menu .accordion-body[data-con="text"] .accordion-sub[data-con="noCollapse"] .form-check {
+            margin-bottom: 0; }
       .side-menu .accordion-body[data-con="text"] .accordion-sub:not(.collapsed) ~ div {
         border-bottom: none; }
       .side-menu .accordion-body[data-con="text"] .accordion-sub ~ .accordion-collapse {
@@ -16996,6 +17074,12 @@ footer .footer-logo {
           background: url("../images/ic-circle-minus.svg") center no-repeat; }
         .side-menu .accordion-body[data-con="text"] .accordion-subsub ~ .accordion-collapse {
           padding-left: 52px; }
+        .side-menu .accordion-body[data-con="text"] .accordion-subsub[data-con="noCollapse"] {
+          padding-left: 28px; }
+          .side-menu .accordion-body[data-con="text"] .accordion-subsub[data-con="noCollapse"]:after {
+            display: none; }
+          .side-menu .accordion-body[data-con="text"] .accordion-subsub[data-con="noCollapse"] .form-check {
+            margin-bottom: 0; }
     .side-menu .accordion-body .input-group {
       width: calc(100% - 40px) !important; }
     .side-menu .accordion-body-title {
@@ -17297,7 +17381,7 @@ footer .footer-logo {
 
 /*------------------地圖區塊開始--------------------*/
 .map-content-wrapper {
-  height: calc(100vh - 73px);
+  height: calc(100vh - 62px);
   overflow: hidden;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -17309,7 +17393,7 @@ footer .footer-logo {
       -ms-flex-pack: justify;
           justify-content: space-between;
   position: relative; }
-  @media (max-width: 1200px) {
+  @media (max-width: 991px) {
     .map-content-wrapper {
       height: calc(100vh - 59px); } }
   @media (max-width: 576px) {
