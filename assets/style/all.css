@@ -17322,15 +17322,6 @@ footer .footer-logo {
       .accordion[data-con="layer"] .accordion-body {
         padding-left: 36px; } }
 
-.accordion-toggler {
-  position: relative; }
-  .accordion-toggler .layer-btn {
-    position: absolute;
-    height: 30px;
-    right: 40px;
-    top: 4px;
-    z-index: 1000; }
-
 .function-btn {
   display: -webkit-box;
   display: -ms-flexbox;

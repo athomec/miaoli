@@ -207,14 +207,15 @@
                         data-bs-toggle="collapse" data-bs-target="#collapseOne">
                         占用情形1
                     </button>
-                    <button class="btn btn-highlight d-flex align-items-center text-white me-3 layer-btn">
-                        <img src="./assets/images/ic-trash-white.svg" alt="icon" class="me-2"> 刪除占用情形
-                    </button>
                 </div>
-
                 <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent=".modal-accordion">
                     <div class="accordion-body px-0">
                         <div class="row gy-3">
+                            <div class="col-12">
+                                <button class="btn btn-highlight d-flex align-items-center text-white ms-auto py-1">
+                                    <img src="./assets/images/ic-trash-white.svg" alt="icon"> 刪除占用情形
+                                </button>
+                            </div>
                             <div class="col-12 d-flex justify-content-end align-items-center">
                                 <label for="buildingNow" class="me-2">地上物情形</label>
                                 <select class="form-select" id="buildingNow" style="width: calc(100% - 92px)">
@@ -305,7 +306,7 @@
                 </div>
             </div>
             <div class="d-flex justify-content-end align-items-center mb-4">
-                <button class="btn btn-primary-dark d-flex align-items-center">
+                <button class="btn btn-primary-dark d-flex align-items-center mb-5">
                     <img src="./assets/images/ic-add-occupy.svg" alt="icon" class="me-2"> 新增占用情形
                 </button>
             </div>
