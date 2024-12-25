@@ -18518,9 +18518,9 @@ hr {
   padding: 0 !important; }
 
 .bootstrap-datetimepicker-widget table th {
-  height: 30px;
-  line-height: 30px;
-  width: 30px;
+  height: 40px;
+  line-height: 40px;
+  width: 40px;
   color: #1074B5;
   border-bottom: 1px solid #D5F0FF;
   background: none; }
@@ -18606,10 +18606,10 @@ hr {
 
 .bootstrap-datetimepicker-widget table td span {
   display: inline-block;
-  width: 32px;
+  width: 45px;
   height: 32px;
   line-height: 32px;
-  margin: 2px 1.5px;
+  margin: 6px 1.5px;
   cursor: pointer;
   border-radius: 0.25rem; }
 
